@@ -51,7 +51,7 @@ public class GraphiteTargetChecker implements TargetChecker {
             for (JsonNode metric : node) {
                 String target = metric.path("target").asText();
                 try {
-                    BigDecimal value = getLatestValue(metric);
+                    BigDecimal value = getLatestValue(metric, graphiteHttpClient.getGraphiteTreatNullasZeroEnable());
                     targetValues.put(target, Optional.of(value));
                 } catch (InvalidGraphiteValueException e) {
                     // Silence these - we don't know what's causing Graphite to return null values
@@ -69,13 +69,15 @@ public class GraphiteTargetChecker implements TargetChecker {
     /**
      * Loop through the datapoints in reverse order until we find the latest non-null value
      */
-    private BigDecimal getLatestValue(JsonNode node) throws Exception {
+    private BigDecimal getLatestValue(JsonNode node, Boolean graphiteTreatNullasZeroEnable) throws Exception {
         JsonNode datapoints = node.get("datapoints");
         
         for (int i = datapoints.size() - 1; i >= 0; i--) {
             String value = datapoints.get(i).get(0).asText();
             if (!value.equals("null")) {
                 return new BigDecimal(value);
+            } else if (value.equals("null") && graphiteTreatNullasZeroEnable == true) {
+            	return new BigDecimal(0);
             }
         }
         

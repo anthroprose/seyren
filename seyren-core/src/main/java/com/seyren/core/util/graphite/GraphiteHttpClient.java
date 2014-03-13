@@ -80,6 +80,7 @@ public class GraphiteHttpClient {
     private final String graphiteKeyStore;
     private final String graphiteKeyStorePassword;
     private final String graphiteTrustStore;
+    private final Boolean graphiteTreatNullasZeroEnable;
     private final int graphiteConnectionRequestTimeout;
     private final int graphiteConnectTimeout;
     private final int graphiteSocketTimeout;
@@ -99,6 +100,7 @@ public class GraphiteHttpClient {
         this.graphiteConnectionRequestTimeout = seyrenConfig.getGraphiteConnectionRequestTimeout();
         this.graphiteConnectTimeout = seyrenConfig.getGraphiteConnectTimeout();
         this.graphiteSocketTimeout = seyrenConfig.getGraphiteSocketTimeout();
+        this.graphiteTreatNullasZeroEnable = seyrenConfig.getGraphiteTreatNullasZeroEnable();
         this.context = new BasicHttpContext();
         this.client = createHttpClient();
     }
@@ -156,6 +158,10 @@ public class GraphiteHttpClient {
         } finally {
             get.releaseConnection();
         }
+    }
+    
+	public boolean getGraphiteTreatNullasZeroEnable() {
+        return this.graphiteTreatNullasZeroEnable;
     }
     
     private HttpClient createHttpClient() {

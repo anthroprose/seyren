@@ -43,6 +43,7 @@ public class SeyrenConfig {
     private final String graphiteTrustStore;
     private final String graphiteCarbonPickleEnable;
     private final String graphiteCarbonPicklePort;
+    private final String graphiteTreatNullasZeroEnable;
     private final int graphiteConnectionRequestTimeout;
     private final int graphiteConnectTimeout;
     private final int graphiteSocketTimeout;
@@ -87,6 +88,7 @@ public class SeyrenConfig {
         this.graphiteTrustStore = configOrDefault("GRAPHITE_TRUSTSTORE", "");
         this.graphiteCarbonPickleEnable = configOrDefault("GRAPHITE_CARBON_PICKLE_ENABLE", "false");
         this.graphiteCarbonPicklePort = configOrDefault("GRAPHITE_CARBON_PICKLE_PORT", "2004");
+        this.graphiteTreatNullasZeroEnable = configOrDefault("GRAPHITE_NULL_AS_ZERO_ENABLE", "false");
         this.graphiteConnectionRequestTimeout = Integer.parseInt(configOrDefault("GRAPHITE_CONNECTION_REQUEST_TIMEOUT", "0"));
         this.graphiteConnectTimeout = Integer.parseInt(configOrDefault("GRAPHITE_CONNECT_TIMEOUT", "0"));
         this.graphiteSocketTimeout = Integer.parseInt(configOrDefault("GRAPHITE_SOCKET_TIMEOUT", "0"));
@@ -327,6 +329,11 @@ public class SeyrenConfig {
         return Boolean.valueOf(graphiteCarbonPickleEnable);
     }
     
+    @JsonIgnore
+    public boolean getGraphiteTreatNullasZeroEnable() {
+        return Boolean.valueOf(graphiteTreatNullasZeroEnable);
+    }
+
     @JsonIgnore
     public int getGraphiteConnectionRequestTimeout() {
         return graphiteConnectionRequestTimeout;
